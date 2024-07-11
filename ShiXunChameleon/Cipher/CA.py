@@ -48,28 +48,7 @@ class SXchameleonCA():
             A_i1 = A_list[i].combine_row(zero - A_bar*MSK[i][1])
             MPK.append([A_i0, A_i1])
         
-        # 測試
-        Fid = IntMatrix.gen_zero(size=(para.n, para.m))
-        Rid = IntMatrix.gen_zero(size=(para.mp, para.n * para.log_q))
-        for i in range(para.l):
-            Fid += MPK[i][0]
-            Rid += MSK[i][0]
-        Fid %= para.q
-        
-           
-        RidI = BasicSIS.RI(Rid)
-        
-        r = (Fid*RidI) % para.q
-        r.print_str()
-        
-        
-        '''
-        G = BasicSIS.gen_G()
-        left = (G - (A_bar * Rid)) % para.q
-        print('left')
-        left.print_str()
-        '''
-        return MPK, MSK, A_bar
+        return MPK, MSK
         
         
         

@@ -1,67 +1,8 @@
 from ShiXunChameleon.Math.Matrix import IntMatrix
-from ShiXunChameleon.Cipher import BasicSIS
-from ShiXunChameleon.Config import config
 from ShiXunChameleon.Cipher.CA import SXchameleonCA
-import matplotlib.pyplot as plt
-
-
-def count_number_distribution(matrix, interval_size, q):
-    array = []
-    for ele in matrix:
-        array += ele
-        
-    distribution = {}
-    for start in range(0, q + 1, interval_size):
-        end = start + interval_size - 1
-        range_label = f"{start}-{end}"
-        distribution[range_label] = 0
-    
-    for number in array:
-        range_start = (number // interval_size) * interval_size
-        range_end = range_start + interval_size - 1
-        range_label = f"{range_start}-{range_end}"
-        if range_label in distribution:
-            distribution[range_label] += 1
-    
-    return distribution
-
-
-
-def plot_distribution(distribution):
-    ranges = list(distribution.keys())
-    counts = list(distribution.values())
-
-    plt.bar(ranges, counts, align='center', alpha=0.7, edgecolor='black')
-    plt.xlabel('Range')
-    plt.ylabel('Count')
-    plt.title('Number Distribution in Intervals')
-    plt.xticks(rotation=45)
-    plt.grid(True)
-    plt.show()
-
-
-
-def analyze(M: IntMatrix, interval: int) -> None:
-    para = config.cryptParameter
-    distribution = count_number_distribution(M.IntMatrix, interval, para.q)
-    plot_distribution(distribution)
-
-def test():
-    q = 1024
-    mu = int(q/2)
-    size = (50, 50)
-    sigma = 10
-    interval = 20
-
-    M1 = IntMatrix.gauss_distribute_matrix(size=size, mu=mu, sigma=sigma)
-    M1_list = [element for row in M1.IntMatrix for element in row]
-    
-    for i in range(100):
-        M1 += IntMatrix.gauss_distribute_matrix(size=size, mu=mu, sigma=sigma)
-        
-    M1 = M1 % q
-    M1_list = [element for row in M1.IntMatrix for element in row]
-    plot_distribution(count_number_distribution(M1_list, interval, q))
+from ShiXunChameleon.Cipher import BasicSIS
+from ShiXunChameleon.IO import Evaluate
+from ShiXunChameleon.Config import config
 
 
 
@@ -75,6 +16,7 @@ def SIS_collision_demo():
     x = BasicSIS.gen_x()
     u = (A * x) % para.q
     
+    # 計算雜湊
     x2 = BasicSIS.inverse_SIS(A, u, R)
     u2 = (A * x2) % para.q
     
@@ -84,14 +26,35 @@ def SIS_collision_demo():
 
 
 def ShiXunChameleon_setup_phase():
+    config.set_parameter(n=50, q=509, l=100, sigma=0.17)
     para = config.cryptParameter
-    
+    print(para.m)
     CA_obj = SXchameleonCA()
-    MPK, MSK, A_bar = CA_obj.generate_MPK_MSK() 
+    MPK, MSK = CA_obj.generate_MPK_MSK()
     
     
-
-
+    # 假設身分訊息每個bit都是1
+    Fid = IntMatrix.gen_zero(size=(para.n, para.m))
+    Rid = IntMatrix.gen_zero(size=(para.mp, para.n * para.log_q))
+    for i in range(para.l):
+        Fid += MPK[i][1]
+        Rid += MSK[i][1]
+    Fid %= para.q
+    
+    # 舉出SIS實例
+    x = BasicSIS.gen_x()
+    u = (Fid * x) % para.q
+    
+    # 計算雜湊
+    x2 = BasicSIS.inverse_SIS(Fid, u, Rid)
+    u2 = (Fid * x2) % para.q
+    
+    print(u == u2)
+    print(x == x2)
+    print(Evaluate.calcu_x_len(x2))
+    
+    Evaluate.normal_analyze(Fid, 50)
+    Evaluate.gauss_analyze(Rid, 7)
     
     
 
