@@ -1,8 +1,11 @@
+from ShiXunChameleon.Config import config
+
 from ShiXunChameleon.Math.Matrix import IntMatrix
 from ShiXunChameleon.Cipher.CA import SXchameleonCA
+from ShiXunChameleon.Cipher.Crypto import SXchameleonUser
 from ShiXunChameleon.Cipher import BasicSIS
-from ShiXunChameleon.IO import Evaluate
-from ShiXunChameleon.Config import config
+from ShiXunChameleon.IO import Evaluate, extract_CA
+
 
 
 
@@ -20,45 +23,84 @@ def SIS_collision_demo():
     x2 = BasicSIS.inverse_SIS(A, u, R)
     u2 = (A * x2) % para.q
     
-    print(u == u2)
-    print(x == x2)
+    print('是否產生碰撞：', u == u2)
+    print('x是否相同：', x == x2)
     
-
-
-def ShiXunChameleon_setup_phase():
-    config.set_parameter(n=50, q=509, l=100, sigma=0.17)
-    para = config.cryptParameter
-    print(para.m)
+    if False:
+        Evaluate.normal_analyze(A, 3)
+        Evaluate.gauss_analyze(R, 7)
+        
+    
+def ShiXunChameleon_setup_phase() -> None:
     CA_obj = SXchameleonCA()
-    MPK, MSK = CA_obj.generate_MPK_MSK()
     
+    # 生成MPK、MSK
+    CA_obj.generate_MPK_MSK()
     
-    # 假設身分訊息每個bit都是1
-    Fid = IntMatrix.gen_zero(size=(para.n, para.m))
-    Rid = IntMatrix.gen_zero(size=(para.mp, para.n * para.log_q))
-    for i in range(para.l):
-        Fid += MPK[i][1]
-        Rid += MSK[i][1]
-    Fid %= para.q
+    # 保存MPK、MSK
+    MPK_pem = CA_obj.extract_master_key()
+    with open('MPK.pem', 'wb') as f:
+        f.write(MPK_pem)
     
+    MSK_pem = CA_obj.extract_master_private_key()
+    with open('MSK.pem', 'wb') as f:
+        f.write(MSK_pem)
+    
+
+def ShiXunChameleon_generate_user_PK(ID: str) -> None:
+    # 讀取MPK
+    CA_obj = SXchameleonCA()
+    with open('MSK.pem', 'rb') as f:
+        MSK_pem = f.read()
+    CA_obj.import_key(MSK_pem)
+    
+    # 生成並保存R_ID
+    R_ID_pem= CA_obj.extract_user_private_key(ID)
+    with open('SK_{}.pem'.format(ID), 'wb') as f:
+        f.write(R_ID_pem)
+    
+
+def ShiXunChameleon_hash(ID: str) -> IntMatrix:
+    usr_obj = SXchameleonUser(ID)
+    with open('MPK.pem', 'rb') as f:
+        MPK_pem = f.read()
+    usr_obj.import_MPK(MPK_pem)
+    
+    # ----- 雜湊 -----
     # 舉出SIS實例
     x = BasicSIS.gen_x()
-    u = (Fid * x) % para.q
+    u = usr_obj.hashing(x)
     
-    # 計算雜湊
-    x2 = BasicSIS.inverse_SIS(Fid, u, Rid)
-    u2 = (Fid * x2) % para.q
     
-    print(u == u2)
-    print(x == x2)
-    print(Evaluate.calcu_x_len(x2))
+    # ----- 碰撞 -----
+    # 讀取並載入R_ID
+    with open('SK_{}.pem'.format(ID), 'rb') as f:
+        R_ID_pem = f.read()
+    usr_obj.import_key(R_ID_pem)
     
-    Evaluate.normal_analyze(Fid, 50)
-    Evaluate.gauss_analyze(Rid, 7)
+    # 計算雜湊碰撞
+    x2 = usr_obj.forge(u)
     
+    # 檢查碰撞
+    u2 = usr_obj.hashing(x2)
+    print('是否產生碰撞：', u == u2)
+    print('x是否相同：', x == x2)
     
 
+
 if __name__ == '__main__':
-    ShiXunChameleon_setup_phase()
+    ID = '101010111000101000010010101010'
+    #config.set_parameter(n=30, q=104729, l=len(ID), sigma=0.3)
+    config.set_parameter(n=5, q=31, l=len(ID), sigma=0.3)
+    
+    # SIS collision demo
+    if True:
+        SIS_collision_demo()
+    
+    # ShiXunChameleon demo 
+    if True:
+        ShiXunChameleon_setup_phase()
+        ShiXunChameleon_generate_user_PK(ID)
+        ShiXunChameleon_hash(ID)
    
    

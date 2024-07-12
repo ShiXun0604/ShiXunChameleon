@@ -162,7 +162,11 @@ class IntMatrix():
             s += '\n'
         print(s.strip('\n'))
         """
+        
     
+    def write_str(self) -> None:
+        s = '\n'.join('  '.join(f'{element:{self.maxlen}}' for element in row) for row in self.IntMatrix)
+        return s
     
     # 橫向合併
     def combine_row(self, M2: IntMatrix) -> IntMatrix:
