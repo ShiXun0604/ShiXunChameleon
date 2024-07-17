@@ -1,19 +1,23 @@
 from ShiXunChameleon.Config import config
 from ShiXunChameleon.Math.Matrix import IntMatrix
 from ShiXunChameleon.Cipher import BasicSIS
-from ShiXunChameleon.Cipher.UserKeyPair import SXchameleonKeyPair
 from ShiXunChameleon.IO import Error
 import base64
 
-
-
-    
+ 
 
 
 class SXchameleonCA():
+    """_summary_
+    定義phase1、phase2的過程。
+    """
     def __init__(self) -> None:
         self.MPK = None
         self.__MSK = None
+    
+    @property
+    def MSK(self):
+        return self.__MSK
     
     
     def __insert_line_breaks(self, s):
@@ -30,7 +34,7 @@ class SXchameleonCA():
         Ai_size, Ai_rng = (para.n, para.mp), para.rng
         
         for i in range(para.l):
-            A_i = IntMatrix.rand_normal_distribute_matrix(size=Ai_size, rng=Ai_rng)
+            A_i = IntMatrix.normal_distribute_matrix(size=Ai_size, rng=Ai_rng)
             A_list.append(A_i)
 
         A_bar = A_list[0]
@@ -53,8 +57,7 @@ class SXchameleonCA():
         
         A_00 = A_list[0].combine_row(G - A_bar*MSK[0][0])
         A_00 %= para.q
-        #A_00.print_str()
-        #MSK[0][0].print_str()
+        
         A_01 = A_list[0].combine_row(G - A_bar*MSK[0][1])
         A_01 %= para.q
         MPK.append([A_00, A_01])
@@ -125,7 +128,7 @@ class SXchameleonCA():
         # 組成RID
         R_ID = IntMatrix.gen_zero(size=(para.mp, para.n * para.log_q))
         for i in range(para.l):
-            R_ID += self.__MSK[i][1]
+            R_ID += self.__MSK[i][int(ID[i])]
                 
         ext_data = str(R_ID).replace('\n', '\\').encode()
         ext_data = base64.b64encode(ext_data)

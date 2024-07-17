@@ -4,7 +4,7 @@ from ShiXunChameleon.Math.Matrix import IntMatrix
 from ShiXunChameleon.Cipher.CA import SXchameleonCA
 from ShiXunChameleon.Cipher.Crypto import SXchameleonUser
 from ShiXunChameleon.Cipher import BasicSIS
-from ShiXunChameleon.IO import Evaluate, extract_CA
+from ShiXunChameleon.IO import Evaluate
 
 
 
@@ -47,7 +47,7 @@ def ShiXunChameleon_setup_phase() -> None:
         f.write(MSK_pem)
     
 
-def ShiXunChameleon_generate_user_PK(ID: str) -> None:
+def ShiXunChameleon_generate_user_SK(ID: str) -> None:
     # 讀取MPK
     CA_obj = SXchameleonCA()
     with open('MSK.pem', 'rb') as f:
@@ -71,7 +71,6 @@ def ShiXunChameleon_hash(ID: str) -> IntMatrix:
     x = BasicSIS.gen_x()
     u = usr_obj.hashing(x)
     
-    
     # ----- 碰撞 -----
     # 讀取並載入R_ID
     with open('SK_{}.pem'.format(ID), 'rb') as f:
@@ -80,18 +79,17 @@ def ShiXunChameleon_hash(ID: str) -> IntMatrix:
     
     # 計算雜湊碰撞
     x2 = usr_obj.forge(u)
-    
-    # 檢查碰撞
     u2 = usr_obj.hashing(x2)
+    
     print('是否產生碰撞：', u == u2)
     print('x是否相同：', x == x2)
     
-
+    
 
 if __name__ == '__main__':
-    ID = '101010111000101000010010101010'
+    ID = '101'
     #config.set_parameter(n=30, q=104729, l=len(ID), sigma=0.3)
-    config.set_parameter(n=5, q=31, l=len(ID), sigma=0.3)
+    config.set_parameter(n=3, q=13, l=len(ID), sigma=0.3)
     
     # SIS collision demo
     if True:
@@ -100,7 +98,7 @@ if __name__ == '__main__':
     # ShiXunChameleon demo 
     if True:
         ShiXunChameleon_setup_phase()
-        ShiXunChameleon_generate_user_PK(ID)
+        ShiXunChameleon_generate_user_SK(ID)
         ShiXunChameleon_hash(ID)
-   
-   
+    
+    

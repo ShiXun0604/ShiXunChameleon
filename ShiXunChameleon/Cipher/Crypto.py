@@ -13,7 +13,7 @@ class SXchameleonUser(SXchameleonKeyPair):
         super().__init__()
         self.MPK = None
         self.ID = ID
-        
+                
     def __calcu_F_ID(self) -> IntMatrix:
         # 偵錯
         if self.MPK == None:
@@ -24,7 +24,7 @@ class SXchameleonUser(SXchameleonKeyPair):
         para = config.cryptParameter
         F_ID = IntMatrix.gen_zero(size=(para.n, para.m))
         for i in range(para.l):
-            F_ID += self.MPK[i][1]
+            F_ID += self.MPK[i][int(self.ID[i])]
         F_ID %= para.q
         
         self.F_ID = F_ID
