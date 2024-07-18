@@ -51,6 +51,12 @@ class IntMatrix():
 
     @property
     def trans(self) -> IntMatrix:
+        """_summary_
+        回傳轉置矩陣。
+        
+        Returns:
+            IntMatrix: 轉置矩陣的物件
+        """
         result = [[self.IntMatrix[i][j] for i in range(self.rows)] for j in range(self.cols)]
         
         return IntMatrix(result)

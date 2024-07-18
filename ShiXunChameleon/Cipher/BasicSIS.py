@@ -97,6 +97,8 @@ def inverse_sis(x: int) -> list[int]:
     """
     def recur_tool(u: int, curr_result: list[int]):
         # 傳說中高效的演算法
+        # 應該有更高效的寫法
+        # 請參考影片 https://www.youtube.com/watch?v=fVen9vkFWlk&list=LL&index=59&ab_channel=SimonsInstitute
         if len(curr_result) == para.log_q:
             ans = 0
             for i in range(len(curr_result)):
@@ -106,7 +108,7 @@ def inverse_sis(x: int) -> list[int]:
                 ans_list.append(curr_result)
             return
 
-        # 嘗試三種情況
+        # 每一個bit嘗試三種情況
         for x_i in [-1, 0, 1]:
             U = (u - x_i) / 2
             if Tools.is_int(U):
@@ -115,7 +117,7 @@ def inverse_sis(x: int) -> list[int]:
                 
     para = config.cryptParameter
     
-    # 遞迴計算f_g^-1(u) = [x1, ... ,x?]
+    # 計算f_g^-1(u) = [x1, ... ,x?]
     ans_list = []
     recur_tool(u=x, curr_result=[])
     
@@ -144,8 +146,6 @@ def inverse_SIS(A: IntMatrix, u: IntMatrix, R: IntMatrix) -> IntMatrix:
     z = IntMatrix(z)
     
     # step2 算x'
-    R_I = RI(R)
-
-    xp = R_I * z
+    xp = RI(R) * z
     
     return xp
