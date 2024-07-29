@@ -8,7 +8,7 @@ import base64
 
 
 class SXchameleonCA():
-    """_summary_
+    """
     定義phase1、phase2的過程。
     在此class中，可以生成MPK、MSK、生成ID的private key。
     """
@@ -27,11 +27,8 @@ class SXchameleonCA():
     
     
     def generate_MPK_MSK(self) -> None:
-        """_summary_
-        生成MPK、MSK並回傳。
-        
-        Returns:
-            _type_: _description_
+        """
+        在物件中生成MPK、MSK。
         """
         para = config.cryptParameter
         G = BasicSIS.gen_G()
@@ -59,7 +56,6 @@ class SXchameleonCA():
                 
         # 計算MPK
         MPK = []
-        zero = IntMatrix.gen_zero(size=(para.n, para.n * para.log_q))
         
         # l = 1
         A_00 = A_list[0].combine_row(G - A_bar*MSK[0][0])
@@ -70,6 +66,7 @@ class SXchameleonCA():
         MPK.append([A_00, A_01])
 
         # l != 1
+        zero = IntMatrix.gen_zero(size=(para.n, para.n * para.log_q))
         for i in range(1, para.l):
             A_i0 = A_list[i].combine_row(zero - A_bar*MSK[i][0])
             A_i0 %= para.q
@@ -82,11 +79,11 @@ class SXchameleonCA():
     
     
     def extract_master_key(self) -> bytes:
-        """_summary_
+        """
         輸出公鑰字串做為寫入檔案用。
 
         Raises:
-            Error.KeyExtractionError: 若class內沒有公鑰則觸發此錯誤
+            Error.KeyExtractionError: 若物件中沒有公鑰則觸發此錯誤
 
         Returns:
             bytes: 公鑰字串
@@ -117,11 +114,11 @@ class SXchameleonCA():
     
     
     def extract_master_private_key(self) -> bytes:
-        """_summary_
+        """
         輸出私鑰字串做為寫入檔案用。
 
         Raises:
-            Error.KeyExtractionError: 若class內沒有私鑰則觸發此錯誤
+            Error.KeyExtractionError: 若物件中沒有私鑰則觸發此錯誤
 
         Returns:
             bytes: 私鑰字串
@@ -152,7 +149,7 @@ class SXchameleonCA():
 
 
     def extract_user_private_key(self, ID: str) -> bytes:
-        """_summary_
+        """
         輸入ID字串後，使用MSK計算該ID的私鑰後回傳。
         
         Args:
@@ -188,7 +185,7 @@ class SXchameleonCA():
     
     
     def import_key(self, data: bytes) -> None:
-        """_summary_
+        """
         將寫入檔案後的字串重新轉換為物件。
 
         Args:

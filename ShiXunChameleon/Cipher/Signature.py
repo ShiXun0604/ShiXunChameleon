@@ -7,6 +7,8 @@ from hashlib import sha256
 import base64
 
 
+
+# 忽然想到可以用SIS做Signature,參考著看吧
 class SISkeyPair():
     def __init__(self) -> None:
         self.A = None

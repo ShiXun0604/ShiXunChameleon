@@ -1,13 +1,10 @@
+# 這裡的程式碼都是改寫自ChatGPT-4o
 __all__ = [
     'bytes_to_binary',
     'binary_to_bytes',
     'binary_to_bytes',
     'bytes_to_binary',
 ]
-
-"""
-這裡的程式碼都是改寫自ChatGPT-4o
-"""
 
 
 
@@ -20,6 +17,7 @@ def bytes_to_hex(byte_data: bytes) -> str:
     hex_str = byte_data.hex()
     
     return '0x' + hex_str
+
 
 
 def hex_to_bytes(hex_str: str) -> bytes:
@@ -53,6 +51,7 @@ def bytes_to_binary(byte_data: bytes) -> str:
     
     binary_str = binary_str.zfill(original_length)
     return '0b' + binary_str
+
 
 
 def binary_to_bytes(data: str) -> bytes:

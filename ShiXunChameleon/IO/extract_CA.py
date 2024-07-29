@@ -1,6 +1,7 @@
 from ShiXunChameleon.Math.Matrix import IntMatrix
 
 
+# 單純測試用
 def extract(MPK: list[list[IntMatrix]], MSK: list[list[IntMatrix]]) -> None:
     with open('MPK.txt', 'w') as f:
         for i, ele in enumerate(MPK):

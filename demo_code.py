@@ -8,7 +8,6 @@ from ShiXunChameleon.IO import Evaluate
 
 
 
-
 def SIS_collision_demo():
     para = config.cryptParameter
     

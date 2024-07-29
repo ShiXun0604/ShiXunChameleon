@@ -28,7 +28,7 @@ class MultiprocEnv():
 
 
 class CryptParameter():
-    def __init__(self, n: int, q: int, l: int, sigma: int|float) -> None:
+    def __init__(self, n: int, q: int, l: int, sigma: float) -> None:
         self.__n = int(n)
         self.__q = int(q)
         self.__l = int(l)
@@ -51,7 +51,7 @@ class CryptParameter():
         return self.__l
     
     @property
-    def sigma(self) -> int|float:
+    def sigma(self) -> float:
         return self.__sigma
     
     @property
@@ -86,7 +86,7 @@ class config:
     #cryptParameter = CryptParameter(n=128, q=15991, l=100, sigma=1)
     cryptParameter = CryptParameter(n=2, q=7, l=2, sigma=0.5)
 
-    def set_parameter(n: int, q: int, l: int, sigma: int|float) -> None:
+    def set_parameter(n: int, q: int, l: int, sigma: float) -> None:
         if not isinstance(n, int) or not isinstance(q, int):
             error_message = 'Invalid data type input.'
             raise TypeError(error_message)

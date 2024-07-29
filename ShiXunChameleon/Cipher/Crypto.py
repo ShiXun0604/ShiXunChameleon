@@ -9,12 +9,20 @@ import base64
 
 
 class SXchameleonUser(SXchameleonKeyPair):
+    """
+    定義phase3、phase4的過程，
+    可以運算雜湊以及湊碰撞。
+    """
     def __init__(self , ID: str) -> None:
         super().__init__()
         self.MPK = None
         self.ID = ID
-                
+
+
     def __calcu_F_ID(self) -> IntMatrix:
+        """
+        從MPK中計算User公鑰F_ID
+        """
         # 偵錯
         if self.MPK == None:
             error_message = 'Without MPK importing'
@@ -31,6 +39,14 @@ class SXchameleonUser(SXchameleonKeyPair):
     
     
     def import_MPK(self, data: bytes) -> None:
+        """
+        將MPK匯入物件中。
+        使用open方法將MPK.pem讀進變數後，
+        在此方法中傳入該變數即可。
+
+        Args:
+            data(bytes): MPK.pem讀檔的內容
+        """
         base64_data_list = data.decode().split('\n')
 
         # 取出中間字段，去掉---BEGIN---和---END---
@@ -59,11 +75,29 @@ class SXchameleonUser(SXchameleonKeyPair):
     
     
     def hashing(self, x: IntMatrix) -> IntMatrix:
+        """
+        計算雜湊值。
+
+        Args:
+            x(IntMatrix): 短向量x
+
+        Returns:
+            IntMatrix: SIS雜湊值u
+        """
         para = config.cryptParameter
         return (self.F_ID * x) % para.q
     
     
     def forge(self, u: IntMatrix) -> IntMatrix:
+        """
+        計算雜湊碰撞。
+
+        Args:
+            u(IntMatrix): 碰撞目標u
+        
+        Returns:
+            IntMatrix: 雜湊碰撞x'
+        """
         if self.R_ID == None:
             error_message = 'Without trapdoor imported.'
             raise Error.NoPrivateKeyError(error_message)

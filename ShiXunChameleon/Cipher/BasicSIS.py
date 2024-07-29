@@ -6,7 +6,7 @@ from random import randint
 
 
 def gen_G():
-    """_summary_
+    """
     生成工具矩陣G
     
     Returns:
@@ -34,7 +34,7 @@ def gen_G():
 
 
 def gen_x() -> IntMatrix:
-    """_summary_
+    """
     生成隨機向量x，其中x元素屬於{-1, 0, 1}。
     
     Returns:
@@ -47,7 +47,7 @@ def gen_x() -> IntMatrix:
 
 
 def gen_A_with_trapdoor() -> tuple[IntMatrix, IntMatrix]:
-    """_summary_
+    """
     生成帶有trapdoor R的矩陣A。
 
     Returns:
@@ -70,7 +70,7 @@ def gen_A_with_trapdoor() -> tuple[IntMatrix, IntMatrix]:
 
 
 def RI(R: IntMatrix) -> IntMatrix:
-    """_summary_
+    """
     將trapdoor R下面並一個矩陣I
     
     Args:
@@ -86,7 +86,7 @@ def RI(R: IntMatrix) -> IntMatrix:
 
     
 def inverse_sis(x: int) -> list[int]:
-    """_summary_
+    """
     運算f_g^-1(u)。
     
     Args:
@@ -126,7 +126,7 @@ def inverse_sis(x: int) -> list[int]:
 
 
 def inverse_SIS(A: IntMatrix, u: IntMatrix, R: IntMatrix) -> IntMatrix:
-    """_summary_
+    """
     運算f_A^-1(u)。
     
     Args:

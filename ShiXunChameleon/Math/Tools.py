@@ -1,6 +1,3 @@
-
-
-
 def is_prime(n: int) -> bool:
     if not isinstance(n, int):
         error_message = 'Invalid data type input.'
