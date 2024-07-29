@@ -87,8 +87,8 @@ def ShiXunChameleon_hash(ID: str) -> IntMatrix:
 
 if __name__ == '__main__':
     ID = '101'
-    #config.set_parameter(n=30, q=104729, l=len(ID), sigma=0.3)
-    config.set_parameter(n=3, q=13, l=len(ID), sigma=0.3)
+    #config.set_parameter(n=30, q=104729, l=len(ID), sigma=0.35)
+    config.set_parameter(n=3, q=13, l=len(ID), sigma=0.35)
     
     # SIS collision demo
     if True:
