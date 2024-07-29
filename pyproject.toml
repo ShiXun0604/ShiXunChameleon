@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools", "matplotlib"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ShiXunChameleon"
+version = "1.0.0"
+authors = [
+  { name="ShiXun", email="tomcruise890604@gmail.com" },
+]
+description = "Chameleon hash in post quantum cryptography."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/ShiXun0604/ShiXunChameleon"
+Issues = "https://github.com/ShiXun0604/ShiXunChameleon/issues"
