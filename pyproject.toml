@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ShiXunChameleon"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
   { name="ShiXun", email="tomcruise890604@gmail.com" },
 ]
 description = "Chameleon hash in post quantum cryptography."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
