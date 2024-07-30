@@ -18,7 +18,7 @@ permissions:
 jobs:
   deploy:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -36,4 +36,4 @@ jobs:
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
         user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
+        password: pypi-AgEIcHlwaS5vcmcCJGEzODYxOWJhLTViZTItNDg1YS1iNDY1LTc4MDllNDIyOGNmZgACKlszLCJkYmVhYzMxYi00ZWVjLTQwNzQtYTllZi0xZWZmNjUzODE2MWIiXQAABiBeJmE3sNruHEbei6_P0k1aYP3x8uycLFIXNNTWViKxdA
